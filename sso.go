@@ -7,7 +7,7 @@ import (
 )
 
 type SSOClient struct {
-	SClient *Client
+	SClient *client
 }
 
 func NewSSOClient(endpoint string) (*SSOClient, error) {

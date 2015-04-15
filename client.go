@@ -21,18 +21,18 @@ var (
 	ErrConnectionRefused = errors.New("cannot connect to server endpoint")
 )
 
-type Client struct {
+type client struct {
 	HTTPClient  *http.Client
 	endpoint    string
 	endpointURL *url.URL
 }
 
-func newClient(endpoint string) (*Client, error) {
+func newClient(endpoint string) (*client, error) {
 	u, err := parseEndpoint(endpoint)
 	if err != nil {
 		return nil, ErrInvalidEndpoint
 	}
-	return &Client{
+	return &client{
 		HTTPClient:  http.DefaultClient,
 		endpoint:    endpoint,
 		endpointURL: u,
@@ -50,7 +50,7 @@ func parseEndpoint(endpoint string) (*url.URL, error) {
 	return u, nil
 }
 
-func (c *Client) do(method, path string, data interface{}, forceJSON bool) ([]byte, int, error) {
+func (c *client) do(method, path string, data interface{}, forceJSON bool) ([]byte, int, error) {
 	var params io.Reader
 	if data != nil || forceJSON {
 		buf, err := json.Marshal(data)
@@ -87,7 +87,7 @@ func (c *Client) do(method, path string, data interface{}, forceJSON bool) ([]by
 	return body, resp.StatusCode, nil
 }
 
-func (c *Client) getURL(path string) string {
+func (c *client) getURL(path string) string {
 	urlStr := strings.TrimRight(c.endpointURL.String(), "/")
 	return fmt.Sprintf("%s%s", urlStr, path)
 }
