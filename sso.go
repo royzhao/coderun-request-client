@@ -4,6 +4,8 @@ package client
 import (
 	"encoding/json"
 	"fmt"
+	"net/http"
+	"net/url"
 )
 
 type SSOClient struct {
@@ -25,8 +27,9 @@ type Login struct {
 	Uid      int    `json:"u_id,omitempty" yaml:"u_id,omitempty"`
 }
 
-func (s *SSOClient) IsLogin(path string, data interface{}) (string, error) {
-	body, status, err := s.SClient.do("POST", path, data, true)
+//func (s *SSOClient) IsLogin(path string, data interface{}) (string, error) {
+func (s *SSOClient) IsLogin(path string, data url.Values) (string, error) {
+	body, status, err := s.SClient.do("POST", path, data, false, data)
 	fmt.Println(status)
 	if err != nil {
 		fmt.Println("1")

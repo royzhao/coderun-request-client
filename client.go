@@ -50,7 +50,7 @@ func parseEndpoint(endpoint string) (*url.URL, error) {
 	return u, nil
 }
 
-func (c *client) do(method, path string, data interface{}, forceJSON bool) ([]byte, int, error) {
+func (c *client) do(method, path string, data interface{}, forceJSON bool, test url.Values) ([]byte, int, error) {
 	var params io.Reader
 	if data != nil || forceJSON {
 		buf, err := json.Marshal(data)
@@ -58,9 +58,9 @@ func (c *client) do(method, path string, data interface{}, forceJSON bool) ([]by
 			return nil, -1, err
 		}
 		params = bytes.NewBuffer(buf)
-		params = strings.NewReader(string(buf))
 	}
-	req, err := http.NewRequest(method, c.getURL(path), params)
+	//	req, err := http.NewRequest(method, c.getURL(path), params)
+	req, err := http.NewRequest(method, c.getURL(path), test.Encode())
 	if err != nil {
 		return nil, -1, err
 	}
