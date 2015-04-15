@@ -50,7 +50,7 @@ func parseEndpoint(endpoint string) (*url.URL, error) {
 	return u, nil
 }
 
-func (c *client) do(method, path string, data interface{}, forceJSON bool, test url.Values) ([]byte, int, error) {
+func (c *client) do(method, path string, data interface{}, forceJSON bool, formData url.Values) ([]byte, int, error) {
 	var params io.Reader
 	if data != nil || forceJSON {
 		buf, err := json.Marshal(data)
@@ -59,13 +59,16 @@ func (c *client) do(method, path string, data interface{}, forceJSON bool, test 
 		}
 		params = bytes.NewBuffer(buf)
 	}
-	fmt.Println(params)
-	//	req, err := http.NewRequest(method, c.getURL(path), params)
-	req, err := http.NewRequest(method, c.getURL(path), strings.NewReader(test.Encode()))
+	if formData != nil {
+		params = strings.NewReader(formData.Encode())
+	}
+	req, err := http.NewRequest(method, c.getURL(path), params)
 	if err != nil {
 		return nil, -1, err
 	}
-	if data != nil {
+	if data != nil && formData == nil {
+		req.Header.Set("Content-Type", "application/json")
+	} else if formData != nil {
 		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	} else if method == "POST" {
 		req.Header.Set("Content-Type", "plain/text")

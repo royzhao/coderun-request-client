@@ -24,26 +24,38 @@ func NewSSOClient(endpoint string) (*SSOClient, error) {
 
 type Login struct {
 	Is_login string `json:"is_login" yaml:"is_login"`
-	Uid      int    `json:"u_id,omitempty" yaml:"u_id,omitempty"`
+	Uid      string `json:"u_id,omitempty" yaml:"u_id,omitempty"`
+	Uname    string `json:"u_name,omitempty" yaml:"u_name,omitempty"`
 }
 
 //func (s *SSOClient) IsLogin(path string, data interface{}) (string, error) {
-func (s *SSOClient) IsLogin(path string, data url.Values) (string, error) {
-	body, status, err := s.SClient.do("POST", path, data, false, data)
-	fmt.Println(status)
+func (c *SSOClient) IsLogin(method string, path string, data url.Values) (string, error) {
+	body, _, err := c.SClient.do(method, path, nil, false, data)
+	//	fmt.Println(status)
 	if err != nil {
-		fmt.Println("1")
 		return "false", err
 	}
-	var lo Login
-	err = json.Unmarshal(body, &lo)
+	var li Login
+	err = json.Unmarshal(body, &li)
 	if err != nil {
-		fmt.Println("2")
 		return "false", err
 	}
-	return lo.Is_login, nil
+	return li.Is_login, nil
 }
 
-//func (s *SSOClient) Logout(path string) error {
-//	return error
-//}
+type Out struct {
+	Is_out string `json:"is_logout" yaml:"is_logout"`
+}
+
+func (c *SSOClient) Logout(method string, path string, data url.Values) (string, error) {
+	body, _, err := c.SClient.do(method, path, nil, false, data)
+	if err != nil {
+		return "true", err
+	}
+	var lo Out
+	err = json.Unmarshal(body, &lo)
+	if err != nil {
+		return "true", err
+	}
+	return lo.Is_logout, nil
+}
