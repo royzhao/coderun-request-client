@@ -27,7 +27,7 @@ type Client struct {
 	endpointURL *url.URL
 }
 
-func NewClient(endpoint string) (*Client, error) {
+func newClient(endpoint string) (*Client, error) {
 	u, err := parseEndpoint(endpoint)
 	if err != nil {
 		return nil, ErrInvalidEndpoint

@@ -1,15 +1,31 @@
+//client
 package client
 
-type Sso struct {
-	Sso Client
+import (
+	"encoding/json"
+	"fmt"
+)
+
+type SSOClient struct {
+	SClient *Client
+}
+
+func NewSSOClient(endpoint string) (*SSOClient, error) {
+	c, err := newClient(endpoint)
+	if err != nil {
+		return nil, err
+	}
+	return &SSOClient{
+		SClient: c,
+	}, nil
 }
 
 type test struct {
 	ID int
 }
 
-func (c *Client) IsLogin() error {
-	body, _, err := c.do("GET", "/dockerapi/test", nil, false)
+func (s *SSOClient) IsLogin() error {
+	body, _, err := s.SClient.do("GET", "/dockerapi/test", nil, false)
 	if err != nil {
 		fmt.Println(err)
 		return err
@@ -20,10 +36,10 @@ func (c *Client) IsLogin() error {
 	return err
 }
 
-func main() {
-	endpoint := "http://127.0.0.1:9000"
-	c, err := NewClient(endpoint)
-	c.IsLogin()
-	fmt.Println(err)
-	fmt.Println("Hello World!")
-}
+//func main() {
+//	endpoint := "http://127.0.0.1:9000"
+//	c, err := NewSSOClient(endpoint)
+//	c.IsLogin()
+//	fmt.Println(err)
+//	fmt.Println("Hello World!")
+//}
