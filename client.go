@@ -64,7 +64,7 @@ func (c *client) do(method, path string, data interface{}, forceJSON bool) ([]by
 		return nil, -1, err
 	}
 	if data != nil {
-		req.Header.Set("Content-Type", "application/json")
+		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	} else if method == "POST" {
 		req.Header.Set("Content-Type", "plain/text")
 	}
