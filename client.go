@@ -59,8 +59,9 @@ func (c *client) do(method, path string, data interface{}, forceJSON bool, test 
 		}
 		params = bytes.NewBuffer(buf)
 	}
+	fmt.Println(params)
 	//	req, err := http.NewRequest(method, c.getURL(path), params)
-	req, err := http.NewRequest(method, c.getURL(path), test.Encode())
+	req, err := http.NewRequest(method, c.getURL(path), strings.NewReader(test.Encode()))
 	if err != nil {
 		return nil, -1, err
 	}

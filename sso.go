@@ -4,7 +4,7 @@ package client
 import (
 	"encoding/json"
 	"fmt"
-	"net/http"
+	//	"net/http"
 	"net/url"
 )
 
