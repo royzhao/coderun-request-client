@@ -3,7 +3,6 @@ package client
 
 import (
 	"encoding/json"
-	"fmt"
 	//	"net/http"
 	"net/url"
 )
@@ -24,7 +23,7 @@ func NewSSOClient(endpoint string) (*SSOClient, error) {
 
 type Login struct {
 	Is_login string `json:"is_login" yaml:"is_login"`
-	Uid      string `json:"u_id,omitempty" yaml:"u_id,omitempty"`
+	Uid      int64  `json:"u_id,omitempty" yaml:"u_id,omitempty"`
 	Uname    string `json:"u_name,omitempty" yaml:"u_name,omitempty"`
 }
 
@@ -57,5 +56,5 @@ func (c *SSOClient) Logout(method string, path string, data url.Values) (string,
 	if err != nil {
 		return "true", err
 	}
-	return lo.Is_logout, nil
+	return lo.Is_out, nil
 }
