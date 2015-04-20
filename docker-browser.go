@@ -17,7 +17,7 @@ type Code_type struct {
 }
 type Cmd_type struct {
 	Cmd  string
-	Args []string
+	Args string
 }
 type RunData struct {
 	Id      string
