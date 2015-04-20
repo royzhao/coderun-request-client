@@ -3,7 +3,8 @@ package client
 import (
 	"encoding/json"
 	//	"net/http"
-	"net/url"
+	// "net/url"
+	"fmt"
 )
 
 type DockerClient struct {
@@ -26,7 +27,7 @@ type RunData struct {
 }
 
 type RunRes struct {
-	Code    string
+	Status  int
 	Message string
 }
 
@@ -40,12 +41,13 @@ func NewDockerClient(endpoint string) (*DockerClient, error) {
 	}, nil
 }
 
-func (d *DockerClient) dockerRun(data RunData) (*RunRes, error) {
-	body, _, err := d.Docker.do("POST", "/api/coderunnrt", data, true, nil)
+func (d *DockerClient) DockerRun(data RunData, image string) (*RunRes, error) {
+	body, _, err := d.Docker.do("POST", "/runner/"+image, data, true, nil)
 	if err != nil {
-		return "false", err
+		return nil, err
 	}
 	var li RunRes
+	fmt.Println(body)
 	err = json.Unmarshal(body, &li)
 	if err != nil {
 		return nil, err
