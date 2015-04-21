@@ -23,23 +23,25 @@ func NewSSOClient(endpoint string) (*SSOClient, error) {
 
 type Login struct {
 	Is_login string `json:"is_login" yaml:"is_login"`
-	Uid      int64  `json:"u_id,omitempty" yaml:"u_id,omitempty"`
+	Uid      string `json:"u_id,omitempty" yaml:"u_id,omitempty"`
 	Uname    string `json:"u_name,omitempty" yaml:"u_name,omitempty"`
 }
 
 //func (s *SSOClient) IsLogin(path string, data interface{}) (string, error) {
-func (c *SSOClient) IsLogin(method string, path string, data url.Values) (string, error) {
-	body, _, err := c.SClient.do(method, path, nil, false, data)
+func (c *SSOClient) IsLogin(data url.Values) (Login, error) {
+	body, _, err := c.SClient.do("POST", "/html/baigoSSO/mypage/user_identification.php", nil, false, data)
 	//	fmt.Println(status)
-	if err != nil {
-		return "false", err
-	}
 	var li Login
+	if err != nil {
+		li.Is_login = "false"
+		return li, err
+	}
 	err = json.Unmarshal(body, &li)
 	if err != nil {
-		return "false", err
+		li.Is_login = "false"
+		return li, err
 	}
-	return li.Is_login, nil
+	return li, nil
 }
 
 type Out struct {
