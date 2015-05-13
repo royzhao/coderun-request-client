@@ -29,7 +29,7 @@ type Login struct {
 
 //func (s *SSOClient) IsLogin(path string, data interface{}) (string, error) {
 func (c *SSOClient) IsLogin(data url.Values) (Login, error) {
-	body, _, err := c.SClient.do("POST", "/html/baigoSSO/mypage/user_identification.php", nil, false, data)
+	body, _, err := c.SClient.do("POST", "/user_identification.php", nil, false, data)
 	//	fmt.Println(status)
 	var li Login
 	if err != nil {
