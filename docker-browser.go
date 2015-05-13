@@ -47,10 +47,10 @@ func (d *DockerClient) DockerRun(data RunData, image string) (*RunRes, error) {
 		return nil, err
 	}
 	var li RunRes
-	fmt.Println(body)
 	err = json.Unmarshal(body, &li)
 	if err != nil {
 		return nil, err
 	}
+	fmt.Println(li)
 	return &li, nil
 }
