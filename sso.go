@@ -2,11 +2,26 @@
 package client
 
 import (
+	"encoding/base64"
 	"encoding/json"
 	//	"net/http"
+	"fmt"
 	"net/url"
 )
 
+type UserCode struct {
+	Code      string
+	Key       string
+	Str_alert string
+}
+type UserInfo struct {
+	User_id         string
+	User_name       string
+	User_mail       string
+	User_nick       string
+	User_time       string
+	User_time_login string
+}
 type SSOClient struct {
 	SClient *client
 }
@@ -25,6 +40,37 @@ type Login struct {
 	Is_login string `json:"is_login" yaml:"is_login"`
 	Uid      string `json:"u_id,omitempty" yaml:"u_id,omitempty"`
 	Uname    string `json:"u_name,omitempty" yaml:"u_name,omitempty"`
+}
+
+//get user info by id
+
+func (c *SSOClient) GetUserInfo(app_id int, app_key string, args string) (UserInfo, error) {
+	body, _, err := c.SClient.do("GET", "/api/api.php?"+args, nil, false, nil)
+	var code UserCode
+	var info UserInfo
+	if err != nil {
+		return info, err
+	}
+	err = json.Unmarshal(body, &code)
+	if err != nil {
+		return info, err
+	}
+	decode := fmt.Sprintf("?mod=code&act_get=decode&app_id=%d&app_key=%s&code=%s&key=%s", app_id, app_key, code.Code, code.Key)
+	body, _, err = c.SClient.do("GET", "/api/api.php"+decode, nil, false, nil)
+	if err != nil {
+		return info, err
+	}
+	err = json.Unmarshal(body, &info)
+	if err != nil {
+		return info, err
+	}
+	info.User_id = base64.StdEncoding.DecodeString([]byte(info.User_id))
+	info.User_mail = base64.StdEncoding.DecodeString([]byte(info.User_mail))
+	info.User_name = base64.StdEncoding.DecodeString([]byte(info.User_name))
+	info.User_nick = base64.StdEncoding.DecodeString([]byte(info.User_nick))
+	info.User_time = base64.StdEncoding.DecodeString([]byte(info.User_time))
+	info.User_time_login = base64.StdEncoding.DecodeString([]byte(info.User_time_login))
+	return info, err
 }
 
 //func (s *SSOClient) IsLogin(path string, data interface{}) (string, error) {
