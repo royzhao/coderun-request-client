@@ -42,10 +42,19 @@ type Login struct {
 	Uname    string `json:"u_name,omitempty" yaml:"u_name,omitempty"`
 }
 
+func convertBase642String(src string) string {
+	des, err := base64.StdEncoding.DecodeString(src)
+	if err != nil {
+		return ""
+	}
+	return string(des)
+}
+
 //get user info by id
 
 func (c *SSOClient) GetUserInfo(app_id int, app_key string, args string) (UserInfo, error) {
-	body, _, err := c.SClient.do("GET", "/api/api.php?"+args, nil, false, nil)
+	query := fmt.Sprintf("?mod=user&%s&app_id=%d&app_key=%s", args, app_id, app_key)
+	body, _, err := c.SClient.do("GET", "/api/api.php"+query, nil, false, nil)
 	var code UserCode
 	var info UserInfo
 	if err != nil {
@@ -64,12 +73,12 @@ func (c *SSOClient) GetUserInfo(app_id int, app_key string, args string) (UserIn
 	if err != nil {
 		return info, err
 	}
-	info.User_id = base64.StdEncoding.DecodeString([]byte(info.User_id))
-	info.User_mail = base64.StdEncoding.DecodeString([]byte(info.User_mail))
-	info.User_name = base64.StdEncoding.DecodeString([]byte(info.User_name))
-	info.User_nick = base64.StdEncoding.DecodeString([]byte(info.User_nick))
-	info.User_time = base64.StdEncoding.DecodeString([]byte(info.User_time))
-	info.User_time_login = base64.StdEncoding.DecodeString([]byte(info.User_time_login))
+	info.User_id = convertBase642String(info.User_id)
+	info.User_mail = convertBase642String(info.User_mail)
+	info.User_name = convertBase642String(info.User_name)
+	info.User_nick = convertBase642String(info.User_nick)
+	info.User_time = convertBase642String(info.User_time)
+	info.User_time_login = convertBase642String(info.User_time_login)
 	return info, err
 }
 
