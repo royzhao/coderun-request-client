@@ -47,7 +47,7 @@ func (d *DockerClient) DirectDockerRun(data RunData) (*RunRes, error){
 	if err != nil{
 		return nil,err
 	}
-	var li Runres
+	var li RunRes
 	err = json.Unmarshal(body,&li)
 	if err != nil{
 		return nil,err
