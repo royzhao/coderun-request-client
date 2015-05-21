@@ -41,6 +41,19 @@ func NewDockerClient(endpoint string) (*DockerClient, error) {
 	}, nil
 }
 
+func (d *DockerClient) DirectDockerRun(data RunData) (*RunRes, error){
+
+	body,_,err := d.Docker.do("POST","/api/coderunner",data,true,nil)
+	if err != nil{
+		return nil,err
+	}
+	var li Runres
+	err = json.Unmarshal(body,&li)
+	if err != nil{
+		return nil,err
+	}
+	return &li,nil
+}
 func (d *DockerClient) DockerRun(data RunData, image string) (*RunRes, error) {
 	body, _, err := d.Docker.do("POST", "/runner/"+image, data, true, nil)
 	if err != nil {
