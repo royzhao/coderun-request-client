@@ -64,9 +64,8 @@ func (c *SSOClient) GetUserInfo(app_id string, app_key string, args string) (Use
 	if err != nil {
 		return info, err
 	}
-	fmt.Println(code.Str_alert)
 	if code.Str_alert != "y010102" {
-		return info, newError(1, []byte("no such user"))
+		return info, newError(1, []byte("no such user,error code:"+code.Str_alert))
 	}
 	decode := fmt.Sprintf("?mod=code&act_get=decode&app_id=%s&app_key=%s&code=%s&key=%s", app_id, app_key, code.Code, code.Key)
 	body, _, err = c.SClient.do("GET", "/api/api.php"+decode, nil, false, nil)
