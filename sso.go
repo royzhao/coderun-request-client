@@ -52,8 +52,8 @@ func convertBase642String(src string) string {
 
 //get user info by id
 
-func (c *SSOClient) GetUserInfo(app_id int, app_key string, args string) (UserInfo, error) {
-	query := fmt.Sprintf("?mod=user&%s&app_id=%d&app_key=%s", args, app_id, app_key)
+func (c *SSOClient) GetUserInfo(app_id string, app_key string, args string) (UserInfo, error) {
+	query := fmt.Sprintf("?mod=user&%s&app_id=%s&app_key=%s", args, app_id, app_key)
 	body, _, err := c.SClient.do("GET", "/api/api.php"+query, nil, false, nil)
 	var code UserCode
 	var info UserInfo
@@ -64,7 +64,10 @@ func (c *SSOClient) GetUserInfo(app_id int, app_key string, args string) (UserIn
 	if err != nil {
 		return info, err
 	}
-	decode := fmt.Sprintf("?mod=code&act_get=decode&app_id=%d&app_key=%s&code=%s&key=%s", app_id, app_key, code.Code, code.Key)
+	if code.Str_alert != "y010102" {
+		return info, newError(1, []byte("no such user"))
+	}
+	decode := fmt.Sprintf("?mod=code&act_get=decode&app_id=%s&app_key=%s&code=%s&key=%s", app_id, app_key, code.Code, code.Key)
 	body, _, err = c.SClient.do("GET", "/api/api.php"+decode, nil, false, nil)
 	if err != nil {
 		return info, err
