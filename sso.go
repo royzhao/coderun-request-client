@@ -64,6 +64,7 @@ func (c *SSOClient) GetUserInfo(app_id string, app_key string, args string) (Use
 	if err != nil {
 		return info, err
 	}
+	fmt.Println(code.Str_alert)
 	if code.Str_alert != "y010102" {
 		return info, newError(1, []byte("no such user"))
 	}
