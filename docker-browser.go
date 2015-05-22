@@ -34,7 +34,7 @@ type Image struct{
 	Imagename string
 }
 type LBInstance struct{
-	ServerIp string
+	ServerIP string
 	ServerPort string
 }
 type LBContent struct{
