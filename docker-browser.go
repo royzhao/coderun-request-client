@@ -38,7 +38,7 @@ type LBInstance struct{
 	ServerPort string
 }
 type LBContent struct{
-	Status int
+	Status string
 	Instance LBInstance
 }
 
@@ -67,7 +67,7 @@ func (d *DockerClient) GetIBAddr(lbaddr string,image string)(*LBContent,error){
 	}
 	return &li,nil
 }
-func (d *DockerClient) DirectDockerRun(addr stringdata RunData) (*RunRes, error){
+func (d *DockerClient) DirectDockerRun(addr string,data RunData) (*RunRes, error){
 	ld,err :=newClient(addr)
         if err != nil{
                 return nil,err
