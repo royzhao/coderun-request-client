@@ -52,7 +52,7 @@ func NewDockerClient(endpoint string) (*DockerClient, error) {
 	}, nil
 }
 func (d *DockerClient) GetIBAddr(lbaddr string,image string)(*LBContent,error){
-	ld,err :=newClient("http://192.168.0.196:3000")
+	ld,err :=newClient(lbaddr)
 	if err != nil{
 		return nil,err	
 	}
