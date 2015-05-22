@@ -67,9 +67,13 @@ func (d *DockerClient) GetIBAddr(lbaddr string,image string)(*LBContent,error){
 	}
 	return &li,nil
 }
-func (d *DockerClient) DirectDockerRun(data RunData) (*RunRes, error){
+func (d *DockerClient) DirectDockerRun(addr stringdata RunData) (*RunRes, error){
+	ld,err :=newClient(addr)
+        if err != nil{
+                return nil,err
+        }
 
-	body,_,err := d.Docker.do("POST","/api/coderunner",data,true,nil)
+	body,_,err := ld.do("POST","/api/coderunner",data,true,nil)
 	if err != nil{
 		return nil,err
 	}
