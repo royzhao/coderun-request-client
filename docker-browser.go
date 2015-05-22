@@ -35,10 +35,10 @@ type Image struct{
 }
 type LBInstance struct{
 	ServerIP string
-	ServerPort string
+	ServerPort int
 }
 type LBContent struct{
-	Status string
+	Status int
 	Instance LBInstance
 }
 
