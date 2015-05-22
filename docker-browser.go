@@ -61,7 +61,7 @@ func (d *DockerClient) GetIBAddr(lbaddr string,image string)(*LBContent,error){
 	}
 	body,_,err := ld.do("POST","/api/dispatcher/v1.0/container/create",data,true,nil)
 	var li LBContent
-	err = json.Unmarshal(body.&li)
+	err = json.Unmarshal(body,&li)
 	if err != nil{
 		return nil,err
 	}
