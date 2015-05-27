@@ -62,6 +62,7 @@ func (c *client) do(method, path string, data interface{}, forceJSON bool, formD
 	if formData != nil {
 		params = strings.NewReader(formData.Encode())
 	}
+	// fmt.Println(path)
 	req, err := http.NewRequest(method, c.getURL(path), params)
 	if err != nil {
 		return nil, -1, err
@@ -72,6 +73,8 @@ func (c *client) do(method, path string, data interface{}, forceJSON bool, formD
 		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	} else if method == "POST" {
 		req.Header.Set("Content-Type", "plain/text")
+	} else {
+		req.Header.Set("Content-Type", "application/json")
 	}
 	var resp *http.Response
 	resp, err = c.HTTPClient.Do(req)

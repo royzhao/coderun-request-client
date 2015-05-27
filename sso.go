@@ -21,6 +21,8 @@ type UserInfo struct {
 	User_nick       string
 	User_time       string
 	User_time_login string
+	User_ip         string
+	Str_alert       string
 }
 type SSOClient struct {
 	SClient *client
@@ -53,35 +55,21 @@ func convertBase642String(src string) string {
 //get user info by id
 
 func (c *SSOClient) GetUserInfo(app_id string, app_key string, args string) (UserInfo, error) {
-	query := fmt.Sprintf("?mod=user&%s&app_id=%s&app_key=%s", args, app_id, app_key)
-	body, _, err := c.SClient.do("GET", "/api/api.php"+query, nil, false, nil)
+	query := fmt.Sprintf("mod=user&%s&app_id=%s&app_key=%s", args, app_id, app_key)
+	body, _, err := c.SClient.do("GET", "/api/api.php?"+query, nil, false, nil)
 	var code UserCode
 	var info UserInfo
 	if err != nil {
-		return info, err
-	}
-	err = json.Unmarshal(body, &code)
-	if err != nil {
-		return info, err
-	}
-	if code.Str_alert != "y010102" {
-		return info, newError(1, []byte("no such user,error code:"+code.Str_alert))
-	}
-	decode := fmt.Sprintf("?mod=code&act_get=decode&app_id=%s&app_key=%s&code=%s&key=%s", app_id, app_key, code.Code, code.Key)
-	body, _, err = c.SClient.do("GET", "/api/api.php"+decode, nil, false, nil)
-	if err != nil {
+		fmt.Println(body)
 		return info, err
 	}
 	err = json.Unmarshal(body, &info)
 	if err != nil {
 		return info, err
 	}
-	info.User_id = convertBase642String(info.User_id)
-	info.User_mail = convertBase642String(info.User_mail)
-	info.User_name = convertBase642String(info.User_name)
-	info.User_nick = convertBase642String(info.User_nick)
-	info.User_time = convertBase642String(info.User_time)
-	info.User_time_login = convertBase642String(info.User_time_login)
+	if info.Str_alert != "y010102" {
+		return info, newError(1, []byte("no such user,error code:"+code.Str_alert))
+	}
 	return info, err
 }
 

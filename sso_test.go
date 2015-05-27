@@ -6,13 +6,13 @@ import (
 )
 
 func Test_getuserinfo(t *testing.T) {
-	sso, err := NewSSOClient("http://sso.learn4me.com")
+	sso, err := NewSSOClient("http://local.learn4me.com:4321")
 	if err != nil {
 		t.Error(err)
 	}
-	user, err := sso.GetUserInfo("1", "rjLR0wIP04y7Nxybal09Re2Xn3ZeOy1Pdzt0kyXsr0IlGbsN9tVd72jC0wZPuGRJ", "act_get=get&user_id=1&user_by=user_id")
+	user, err := sso.GetUserInfo("1", "rnyA5jzYvDShxP5QR0R3Ip3gcEDcOEJ12Jwb9JLCbLjNbdetTwlcad83iAVxFen7", "act_get=get&user_id=1&user_by=user_id")
 	if err != nil {
-		log.Println(err)
+		log.Println(err.Error())
 	}
 	log.Println(user)
 }
