@@ -6,7 +6,7 @@ import (
 )
 
 func Test_getuserinfo(t *testing.T) {
-	sso, err := NewSSOClient("http://local.learn4me.com:4321")
+	sso, err := NewSSOClient("http://sso.learn4me.com")
 	if err != nil {
 		t.Error(err)
 	}
@@ -15,4 +15,28 @@ func Test_getuserinfo(t *testing.T) {
 		log.Println(err.Error())
 	}
 	log.Println(user)
+}
+
+func Test_prepareImage(t *testing.T) {
+	lb, err := NewLBClient("http://192.168.0.196:3000")
+	if err != nil {
+		t.Error(err)
+	}
+	res, err := lb.PrepareImage("admin-ubuntu:1")
+	if err != nil {
+		log.Println(err.Error())
+	}
+	log.Println(res)
+}
+
+func Test_prepareImagefailed(t *testing.T) {
+	lb, err := NewLBClient("http://192.168.0.196:3000")
+	if err != nil {
+		t.Error(err)
+	}
+	res, err := lb.PrepareImage("dasdas")
+	if err != nil {
+		log.Println(err.Error())
+	}
+	log.Println(res)
 }
